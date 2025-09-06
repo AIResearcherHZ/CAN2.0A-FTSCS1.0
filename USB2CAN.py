@@ -4,7 +4,6 @@ from enum import IntEnum
 from struct import unpack
 from struct import pack
 
-
 class Motor:
     def __init__(self, MotorType, SlaveID, MasterID):
         """
@@ -240,6 +239,7 @@ class MotorControl:
     def recv(self):
         # 把上次没有解析完的剩下的也放进来
         data_recv = b''.join([self.data_save, self.serial_.read_all()])
+        # print(data_recv)
         packets = self.__extract_packets(data_recv)
         for packet in packets:
             data = packet[7:15]
@@ -335,7 +335,7 @@ class MotorControl:
         :return:
         """
         # 打印发送的原始hex数据
-        print(f"Sent raw HEX data (MotorID 0x{motor_id:02X}): {data.tobytes().hex()}")
+        # print(f"Sent raw HEX data (MotorID 0x{motor_id:02X}): {data.tobytes().hex()}")
         self.send_data_frame[13] = motor_id & 0xff
         self.send_data_frame[14] = (motor_id >> 8)& 0xff  #id high 8 bits
         self.send_data_frame[21:29] = data
@@ -625,3 +625,4 @@ class Control_Type(IntEnum):
     POS_VEL = 2
     VEL = 3
     Torque_Pos = 4
+
